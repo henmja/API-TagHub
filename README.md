@@ -1,1 +1,1 @@
-The database was created using pgAdmin.
+The PostgreSQL database was created using pgAdmin.
