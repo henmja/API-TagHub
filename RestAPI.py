@@ -1,5 +1,6 @@
 !pip install psycopg2
-!pip install requests
+!pip install flask
+!pip install flask_restful
 
 import psycopg2
 
