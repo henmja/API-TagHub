@@ -15,8 +15,8 @@ def createUser(cur):
     cur.execute("""INSERT INTO "Users" (id, brukernavn, epost, passord) VALUES (3, 'x', 'y', 'z')""")
 
 #Hent spesifikk bruker:
-def getUser(cur, userID):
-    cur.execute('select * from "Users" where id = %s',(str(userID)))
+#def getUser(cur, userID):
+#    cur.execute('select * from "Users" where id = %s',(str(userID)))
 
 #Slett spesifikk bruker:
 def delUser(cur, userID):
@@ -68,7 +68,7 @@ def main():
                 if row[0]==num:
                     return row
                 else:
-                    if i==len(rows):
+                    if i==len(rows)-1:
                         return 'Non-existent user!'
                 i+=1
 
