@@ -1,3 +1,5 @@
+!pip install psycopg2
+
 import psycopg2
 
 conn = psycopg2.connect("dbname=UserDB user=postgres password=test")
