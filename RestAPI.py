@@ -11,8 +11,8 @@ app = Flask(__name__)
 api = Api(app)
 
 #Opprett bruker:
-def createUser(cur):
-    cur.execute("""INSERT INTO "Users" (id, brukernavn, epost, passord) VALUES (3, 'x', 'y', 'z')""")
+def createUser(cur, userID, userName, mail, pw):
+    cur.execute("""INSERT INTO "Users" (id, brukernavn, epost, passord) VALUES (%s, %s, %s, %s)""",(str(userID), userName, mail, pw))
 
 #Hent spesifikk bruker:
 #def getUser(cur, userID):
@@ -32,25 +32,23 @@ def getAll(cur):
 
 
 def main():
-    conn = psycopg2.connect("dbname=UserDB user=postgres password=Ageofconan3")
+    conn = psycopg2.connect("dbname=UserDB user=postgres password=test")
 
     #port = 5432
 
     cur = conn.cursor()
-    createUser(cur)
     #getUser(cur,3)
     #rows = cur.fetchall()
     #printRows(rows)
 
 
     delUser(cur,3)
-    getAll(cur)
-    rows = cur.fetchall()
     #printRows(rows)
     class CreateUser(Resource):
         def post(self):
-            some_json = request.get_json()
-            return {'you sent': some_json}, 201
+            par = request.get_json()
+            createUser(cur,par[0], par[1], par[2], par[3])
+            return {'you sent': par}, 201
 
     class DelUser(Resource):
         def post(self):
@@ -59,10 +57,14 @@ def main():
 
     class Users(Resource):
         def get(self):
+            getAll(cur)
+            rows = cur.fetchall()
             return rows
 
     class UserID(Resource):
         def get(self,num):
+            getAll(cur)
+            rows = cur.fetchall()
             i = 0
             for row in rows:
                 if row[0]==num:
@@ -71,7 +73,7 @@ def main():
                     if i==len(rows)-1:
                         return 'Non-existent user!'
                 i+=1
-
+    api.add_resource(CreateUser, '/users')
     api.add_resource(Users, '/users')
     api.add_resource(UserID, '/users/<int:num>')
     app.run(debug=False)
