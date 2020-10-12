@@ -1,4 +1,5 @@
 !pip install psycopg2
+!pip install requests
 
 import psycopg2
 
