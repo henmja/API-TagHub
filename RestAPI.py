@@ -2,49 +2,47 @@
 
 import psycopg2
 
-conn = psycopg2.connect("dbname=UserDB user=postgres password=test")
-
-#port = 5432
-
-cur = conn.cursor()
-
 #Opprett bruker:
-def createUser():
+def createUser(cur):
     cur.execute("""INSERT INTO "Users" (id, brukernavn, epost, passord) VALUES (3, 'x', 'y', 'z')""")
 
 #Hent spesifikk bruker:
-def getUser(userID):
+def getUser(cur, userID):
     cur.execute('select * from "Users" where id = %s',(str(userID)))
 
-createUser()
-getUser(3)
-
-rows = cur.fetchall()
-
-for r in rows:
-    print(r)
-
-
-
-
-
-
 #Slett spesifikk bruker:
-def delUser(userID):
+def delUser(cur, userID):
     cur.execute('DELETE FROM "Users" WHERE id = %s',(str(userID)))
 
 #Hent alle brukere:
-def getAll():
+def getAll(cur):
     cur.execute('select * from "Users"')
 
-delUser(3)
-getAll()
+def printRows(rows):
+    for r in rows:
+        print(r)
 
-rows = cur.fetchall()
 
-for r in rows:
-    print(r)
+def main():
+    conn = psycopg2.connect("dbname=UserDB user=postgres password=test")
 
-cur.close()
+    #port = 5432
 
-conn.close()
+    cur = conn.cursor()
+    createUser(cur)
+    getUser(cur,3)
+    rows = cur.fetchall()
+    printRows(rows)
+
+
+    delUser(cur,3)
+    getAll(cur)
+    rows = cur.fetchall()
+    printRows(rows)
+
+    cur.close()
+
+    conn.close()
+
+if __name__ == "__main__":
+    main()
