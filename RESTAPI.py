@@ -6,8 +6,17 @@ conn = psycopg2.connect("dbname=UserDB user=postgres password=Ageofconan3")
 
 cur = conn.cursor()
 
-cur.execute('select * from "Users"')
+#Hent spesifikk bruker:
+#cur.execute('select <id> from "Users"')
 
+#Opprett bruker:
+cur.execute("""INSERT INTO "Users" (id, brukernavn, epost, passord) VALUES (3, 'x', 'y', 'z')""")
+
+#Slett spesifikk bruker:
+cur.execute('DELETE FROM "Users" WHERE id = 3')
+
+#Hent alle brukere:
+cur.execute('select * from "Users"')
 rows = cur.fetchall()
 
 for r in rows:
