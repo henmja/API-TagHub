@@ -20,4 +20,8 @@ curl http://127.0.0.1:5000/users
 #### Get user by index:
 curl http://127.0.0.1:5000/users/1
 
+#### Add user:
+curl -H "Content-Type: application/json" -X POST -d '[4, "abc", "def", "ghi"]' http://127.0.0.1:5000/users
+
+
 
