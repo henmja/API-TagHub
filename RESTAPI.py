@@ -1,6 +1,6 @@
 import psycopg2
 
-conn = psycopg2.connect("dbname=UserDB user=postgres password=Ageofconan3")
+conn = psycopg2.connect("dbname=UserDB user=postgres password=test")
 
 #port = 5432
 
