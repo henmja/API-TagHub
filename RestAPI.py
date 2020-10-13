@@ -3,7 +3,6 @@
 !pip install flask_restful
 
 import psycopg2
-#import requests
 from flask import Flask, request
 from flask_restful import Resource, Api
 
@@ -26,24 +25,11 @@ def delUser(cur, userID):
 def getAll(cur):
     cur.execute('select * from "Users"')
 
-#def printRows(rows):
-#    for r in rows:
-#        print(r)
-
-
 def main():
     conn = psycopg2.connect("dbname=UserDB user=postgres password=test")
 
-    #port = 5432
-
     cur = conn.cursor()
-    #getUser(cur,3)
-    #rows = cur.fetchall()
-    #printRows(rows)
 
-
-    delUser(cur,3)
-    #printRows(rows)
     class CreateUser(Resource):
         def post(self):
             par = request.get_json()
@@ -51,9 +37,10 @@ def main():
             return {'you sent': par}, 201
 
     class DelUser(Resource):
-        def post(self):
-            some_json = request.get_json()
-            return {'you sent': some_json}, 201
+        def post(self,num):
+            par = request.get_json()
+            delUser(cur,int(par))
+            return {'Deleted user number ':num}, 201
 
     class Users(Resource):
         def get(self):
@@ -76,6 +63,7 @@ def main():
     api.add_resource(CreateUser, '/users')
     api.add_resource(Users, '/users')
     api.add_resource(UserID, '/users/<int:num>')
+    api.add_resource(DelUser, '/users/<int:num>')
     app.run(debug=False)
 
     cur.close()
