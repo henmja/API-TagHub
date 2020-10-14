@@ -38,14 +38,14 @@ def main():
             i = 0
             if len(rows)==0:
                 createUser(cur,par[0], par[1], par[2], par[3])
-                return {'you sent': par}, 201
+                return {'You sent': par}, 201
             for row in rows:
                 if row[0]==par[0]:
-                    return 'User already added!'
+                    return {'Attempted duplicate user registration for user with id': par[0]}, 409
                 else:
                     if i==len(rows)-1:
                         createUser(cur,par[0], par[1], par[2], par[3])
-                        return {'you sent': par}, 201
+                        return {'You sent': par}, 201
                 i+=1
 
     #Resource med POST funksjon for å slette brukere:
@@ -55,13 +55,15 @@ def main():
             getAll(cur)
             rows = cur.fetchall()
             i = 0
+            if len(rows)==0:
+                return 'No resources found!', 404
             for row in rows:
                 if row[0]==par:
                     delUser(cur,int(par))
-                    return {'Deleted user number ':num}, 201
+                    return {'Deleted user number ':num}, 202
                 else:
                     if i==len(rows)-1:
-                        return 'Non-existent user!'
+                        return {'No user with id': par}, 404
                 i+=1
 
     #Resource med GET funksjon for å hente alle brukere:
@@ -70,8 +72,8 @@ def main():
             getAll(cur)
             rows = cur.fetchall()
             if len(rows)==0:
-                return 'No existing users in database!'
-            return rows
+                return 'No resources found!',404
+            return rows, 201
 
     #Resource med GET funksjon for å hente bruker etter ID:
     class UserID(Resource):
@@ -79,12 +81,14 @@ def main():
             getAll(cur)
             rows = cur.fetchall()
             i = 0
+            if len(rows)==0:
+                return 'No resources found!', 404
             for row in rows:
                 if row[0]==num:
-                    return row
+                    return row, 201
                 else:
                     if i==len(rows)-1:
-                        return 'Non-existent user!'
+                        return {'Non-existent user with id':num},404
                 i+=1
 
     api.add_resource(CreateUser, '/users')
