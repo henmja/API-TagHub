@@ -37,12 +37,15 @@ def main():
             rows = cur.fetchall()
             i = 0
             if len(rows)==0:
+                #Suksess!:
                 createUser(cur,par[0], par[1], par[2], par[3])
                 return {'You sent': par}, 201
             for row in rows:
+                #Exception for registrering av eksisterende bruker:
                 if row[0]==par[0]:
                     return {'Attempted duplicate user registration for user with id': par[0]}, 409
                 else:
+                    #Suksess!:
                     if i==len(rows)-1:
                         createUser(cur,par[0], par[1], par[2], par[3])
                         return {'You sent': par}, 201
@@ -55,13 +58,16 @@ def main():
             getAll(cur)
             rows = cur.fetchall()
             i = 0
+            #Exception når det er ingen brukere i databasen:
             if len(rows)==0:
                 return 'No resources found!', 404
             for row in rows:
+                #Suksess!:
                 if row[0]==par:
                     delUser(cur,int(par))
                     return {'Deleted user number ':num}, 202
                 else:
+                    #Exception hvor bruker med gitt id ikke finnes i databasen:
                     if i==len(rows)-1:
                         return {'No user with id': par}, 404
                 i+=1
@@ -71,8 +77,10 @@ def main():
         def get(self):
             getAll(cur)
             rows = cur.fetchall()
+            #Exception når det er ingen brukere i databasen:
             if len(rows)==0:
                 return 'No resources found!',404
+            #Suksess!:
             return rows, 201
 
     #Resource med GET funksjon for å hente bruker etter ID:
@@ -81,11 +89,14 @@ def main():
             getAll(cur)
             rows = cur.fetchall()
             i = 0
+            #Exception når det er ingen brukere i databasen:
             if len(rows)==0:
                 return 'No resources found!', 404
             for row in rows:
+                #suksess!:
                 if row[0]==num:
                     return row, 201
+                #Exception hvor bruker med gitt id ikke finnes i databasen:
                 else:
                     if i==len(rows)-1:
                         return {'Non-existent user with id':num},404
